@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="btn_letters">#fff</color>
+    <color name="actionButton">#FF4081</color>
+    <color name="numberractionButton">#455A64</color>
 </resources>

@@ -3,13 +3,13 @@ package com.incrypto.calculator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
+import android.widget.EditText
+
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var result: EditText
-    private lateinit var newNumber : EditText
+    private lateinit var result: TextView
+    private lateinit var newNumber : TextView
     private  val displayOperation by lazy(LazyThreadSafetyMode.NONE) { findViewById<TextView>(R.id.operation) }
 
 
@@ -25,28 +25,32 @@ class MainActivity : AppCompatActivity() {
         result = findViewById(R.id.result)
         newNumber = findViewById((R.id.newNumber))
 
-        val button0: Button = findViewById(R.id.button0)
-        val button1: Button = findViewById(R.id.button1)
-        val button2: Button = findViewById(R.id.button2)
-        val button3: Button = findViewById(R.id.button3)
-        val button4: Button = findViewById(R.id.button4)
-        val button5: Button = findViewById(R.id.button5)
-        val button6: Button = findViewById(R.id.button6)
-        val button7: Button = findViewById(R.id.button7)
-        val button8: Button = findViewById(R.id.button8)
-        val button9: Button = findViewById(R.id.button9)
-        val buttonDot: Button = findViewById(R.id.buttonDot)
+        val button0: TextView = findViewById(R.id.button0)
+        val button1: TextView = findViewById(R.id.button1)
+        val button2: TextView = findViewById(R.id.button2)
+        val button3: TextView = findViewById(R.id.button3)
+        val button4: TextView = findViewById(R.id.button4)
+        val button5: TextView = findViewById(R.id.button5)
+        val button6: TextView = findViewById(R.id.button6)
+        val button7: TextView = findViewById(R.id.button7)
+        val button8: TextView = findViewById(R.id.button8)
+        val button9: TextView = findViewById(R.id.button9)
+        val buttonDot: TextView = findViewById(R.id.buttonDot)
+        val buttonClear:TextView =findViewById(R.id.buttonClear)
+        val buttonRightBracket: TextView=findViewById(R.id.buttonRightBracket)
+        val buttonLeftBracket: TextView=findViewById(R.id.buttonLeftBracket)
+        val buttonBackspace: TextView=findViewById(R.id.buttonBackspace)
 
-        //Operation Buttons
-        val buttonEquals: Button = findViewById(R.id.buttonEquals)
-        val buttonPlus: Button = findViewById(R.id.buttonPlus)
-        val buttonMinus: Button = findViewById(R.id.buttonMinus)
-        val buttonMultiply: Button = findViewById(R.id.buttonMultiply)
-        val buttonDivide: Button = findViewById(R.id.buttonDivide)
+        //Operation TextViews
+        val buttonEquals: TextView = findViewById(R.id.buttonEquals)
+        val buttonPlus: TextView = findViewById(R.id.buttonPlus)
+        val buttonMinus: TextView = findViewById(R.id.buttonMinus)
+        val buttonMultiply: TextView = findViewById(R.id.buttonMultiply)
+        val buttonDivide: TextView = findViewById(R.id.buttonDivide)
 
 
         val listener = View.OnClickListener { v ->
-            val b = v as Button
+            val b = v as TextView
             newNumber.append(b.text)
         }
 
@@ -62,8 +66,15 @@ class MainActivity : AppCompatActivity() {
         button9.setOnClickListener(listener)
         buttonDot.setOnClickListener(listener)
 
+        buttonClear.setOnClickListener( { v ->
+            result.setText("")
+            newNumber.setText("")
+            displayOperation.setText("")
+        }
+        )
+
         val oplistener = View.OnClickListener { v ->
-            val op = (v as Button).text.toString()
+            val op = (v as TextView).text.toString()
             val value = newNumber.text.toString()
             if (value.isNotEmpty()) {
                 performOperation(op, value)
@@ -88,9 +99,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 operand2 = value.toDouble()
 
-                if (pendingOperation == "=") {
-                    pendingOperation = operation
-                }
+
                 when (pendingOperation) {
                     "=" -> operand1 = operand2
                     "/" -> if (operand1 == 0.0) {
