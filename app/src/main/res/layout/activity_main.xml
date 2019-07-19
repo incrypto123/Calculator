@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:background="@android:color/black"
         android:layout_height="match_parent"
@@ -13,14 +11,6 @@
             style="@style/textViewStyle"
             
            />
-    <TextView
-        
-            style="@style/textViewStyle"
-            
-            android:id="@+id/operation"
-            
-             
-            />
 
     <TextView
             style="@style/textViewStyle"
@@ -30,7 +20,7 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="7"
+            android:layout_weight="9"
             android:orientation="vertical">
         <LinearLayout
                 android:layout_width="match_parent"
@@ -162,7 +152,7 @@
             <TextView
                     android:id="@+id/buttonBackspace"
                     style="@style/NumButtonStyle"
-                    
+                    android:text="Back"
             />
             <TextView
                     android:id="@+id/buttonEquals"

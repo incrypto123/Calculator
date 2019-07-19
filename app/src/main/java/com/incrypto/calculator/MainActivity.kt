@@ -2,21 +2,19 @@ package com.incrypto.calculator
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.EditText
+import net.objecthunter.exp4j.ExpressionBuilder
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var result: TextView
     private lateinit var newNumber : TextView
-    private  val displayOperation by lazy(LazyThreadSafetyMode.NONE) { findViewById<TextView>(R.id.operation) }
 
 
-    //Variables to hold valures for calculation
-    private var operand1 : Double? =null
-    private var operand2 : Double=0.0
-    private var pendingOperation = "="
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +50,18 @@ class MainActivity : AppCompatActivity() {
         val listener = View.OnClickListener { v ->
             val b = v as TextView
             newNumber.append(b.text)
+            if(result.text.isNotEmpty())
+                result.setText("")
+        }
+        val oplistener = View.OnClickListener { v ->
+            val b = v as TextView
+            if (newNumber.text.isNotEmpty())
+                newNumber.append(b.text)
+            else {
+                newNumber.setText(result.text.toString())
+                newNumber.append(b.text)
+                result.setText("")
+            }
         }
 
         button0.setOnClickListener(listener)
@@ -65,69 +75,52 @@ class MainActivity : AppCompatActivity() {
         button8.setOnClickListener(listener)
         button9.setOnClickListener(listener)
         buttonDot.setOnClickListener(listener)
-
-        buttonClear.setOnClickListener( { v ->
-            result.setText("")
-            newNumber.setText("")
-            displayOperation.setText("")
-        }
-        )
-
-        val oplistener = View.OnClickListener { v ->
-            val op = (v as TextView).text.toString()
-            val value = newNumber.text.toString()
-            if (value.isNotEmpty()) {
-                performOperation(op, value)
-            }
-            pendingOperation = op
-            displayOperation.text = pendingOperation
-
-        }
-
-
-        buttonEquals.setOnClickListener(oplistener)
         buttonMinus.setOnClickListener(oplistener)
         buttonPlus.setOnClickListener(oplistener)
         buttonDivide.setOnClickListener(oplistener)
         buttonMultiply.setOnClickListener(oplistener)
         buttonEquals.setOnClickListener(oplistener)
         buttonEquals.setOnClickListener(oplistener)
-    }
-        private fun performOperation(operation :String,value :String) {
-            if (operand1 == null) {
-                operand1 = value.toDouble()
-            } else {
-                operand2 = value.toDouble()
+        buttonRightBracket.setOnClickListener(listener)
+        buttonLeftBracket.setOnClickListener(listener)
 
-
-                when (pendingOperation) {
-                    "=" -> operand1 = operand2
-                    "/" -> if (operand1 == 0.0) {
-                        operand1 = Double.NaN
-                    } else {
-                        operand1 = operand1!! / operand2
-                    }
-                    "*" -> operand1 = operand1!! * operand2
-                    "+" -> operand1 = operand1!! + operand2
-                    "-" -> operand1 = operand1!! + operand2
-                }
-            }
-            result.setText(operand1.toString())
+        buttonClear.setOnClickListener { _ ->
+            result.setText("")
             newNumber.setText("")
 
         }
+        buttonBackspace.setOnClickListener({ _ ->
+            val string = newNumber.text.toString()
+            if (string.isNotEmpty()){
+                newNumber.text = string.substring(0,string.length -1)
+            }
+        })
+
+       
 
 
+        buttonEquals.setOnClickListener({ _ ->
+            try{
+                val expression =ExpressionBuilder(newNumber.text.toString()).build()
+                val resultValue =expression.evaluate()
+                val longResult = resultValue.toLong()
+                if(resultValue==longResult.toDouble())
+                    result.text=longResult.toString()
+                else
+                    result.text= resultValue.toString()
+                    newNumber.setText("")
 
+            }catch(e:Exception){
 
+                Log.d("buttonEquals","message : "+e.message)
+                if(e.message=="Division by zero!")
+                    result.text="Infinity"
+                    newNumber.setText("")
 
+            }
+        })
 
-
-
-
-
-
-
+    }
 
 
 }
